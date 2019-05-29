@@ -10,7 +10,7 @@ import UIKit
 import CoreLocation
 
 
-class ViewController: UIViewController, DistanceSelectionViewControllerDelegate{
+class ViewController: UIViewController, DistanceSelectionViewControllerDelegate, HistoryTableViewControllerDelegate{
 
     @IBOutlet weak var LatP1: UITextField!
     
@@ -34,6 +34,8 @@ class ViewController: UIViewController, DistanceSelectionViewControllerDelegate{
     
     var loc1 : CLLocation = CLLocation()
     var loc2 : CLLocation = CLLocation()
+    
+    var entries : [LocationLookup] = []
     
     
     override func viewDidLoad() {
@@ -78,16 +80,34 @@ class ViewController: UIViewController, DistanceSelectionViewControllerDelegate{
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ViewSettingsSegue" {
-            if let nc = segue.destination as? UINavigationController {
-                if let dest = nc.children[0] as? SettingsViewController {
+        if segue.identifier == "settingsSeque" {
+                if let dest = segue.destination as? SettingsViewController {
                     dest.delegate = self
                 }
                 
             }
             
+    
+        
+        if segue.identifier == "historySegue" {
+            if let dest2 = segue.destination as? HistoryTableViewController {
+                dest2.entries = self.entries
+                dest2.historyDelegate = self
+                
             }
+            
+            
         }
+        
+    }
+    
+    func selectEntry(entry: LocationLookup) {
+        LatP1.text = "\(entry.origLat)"
+        LongP1.text = "\(entry.origLng)"
+        LatP2.text = "\(entry.destLat)"
+        LongP2.text = "\(entry.destLng)"
+        Calculate()
+    }
     
     func indicateSelection(distanceUnits: String, bearingUnits: String) {
         
@@ -139,7 +159,9 @@ class ViewController: UIViewController, DistanceSelectionViewControllerDelegate{
     
     
     @IBAction func CalcTapped(_ sender: UIButton) {
+        entries.append(LocationLookup(origLat: Double(LatP1.text!)!, origLng: Double(LongP1.text!)!, destLat: Double(LatP2.text!)!,destLng: Double(LongP2.text!)!, timestamp: Date()))
         self.Calculate()
+       
     }
     
     
@@ -172,6 +194,7 @@ extension ViewController : UITextFieldDelegate{
         }
         else {
             self.Calculate()
+            entries.append(LocationLookup(origLat: Double(LatP1.text!)!, origLng: Double(LongP1.text!)!, destLat: Double(LatP2.text!)!,destLng: Double(LongP2.text!)!, timestamp: Date()))
         }
         
 

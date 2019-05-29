@@ -112,12 +112,13 @@ class SettingsViewController: UIViewController {
     @IBAction func SavePressed(_ sender: UIBarButtonItem) {
         if let d = self.delegate {
             d.indicateSelection(distanceUnits: selection[0], bearingUnits:  selection[1])
-            d.Calculate()
                 defaults.setValue(selection[0], forKey: "name1")
                 defaults.setValue(selection[1], forKey: "name2")
+            d.Calculate()
             
         }
-        self.dismiss(animated: true, completion: nil)
+        
+        self.navigationController?.popViewController(animated: true)
        
         
     }
@@ -125,7 +126,7 @@ class SettingsViewController: UIViewController {
 
     
     @IBAction func CancelPressed(_ sender: UIBarButtonItem) {
-        self.dismiss(animated: true, completion: nil)
+        self.navigationController?.popViewController(animated: true)
     }
     
    
