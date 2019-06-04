@@ -35,7 +35,9 @@ class ViewController: UIViewController, DistanceSelectionViewControllerDelegate,
     var loc1 : CLLocation = CLLocation()
     var loc2 : CLLocation = CLLocation()
     
-    var entries : [LocationLookup] = []
+    var entries : [LocationLookup] = [
+        LocationLookup(origLat: 90.0, origLng: 0.0, destLat: -90.0, destLng: 0.0, timestamp: Date.distantPast),
+        LocationLookup(origLat: -90.0, origLng: 0.0, destLat: 90.0, destLng: 0.0, timestamp: Date.distantFuture)]
     
     
     override func viewDidLoad() {
